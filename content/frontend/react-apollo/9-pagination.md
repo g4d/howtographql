@@ -295,15 +295,9 @@ With that information, open `LinkList.js` and update the `_updateCacheAfterVote`
 
 ```js{2-11}(path=".../hackernews-react-apollo/src/components/LinkList.js")
 _updateCacheAfterVote = (store, createVote, linkId) => {
-  const isNewPage = this.props.location.pathname.includes('new')
-  const page = parseInt(this.props.match.params.page, 10)
-
-  const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0
-  const first = isNewPage ? LINKS_PER_PAGE : 100
-  const orderBy = isNewPage ? 'createdAt_DESC' : null
   const data = store.readQuery({
     query: FEED_QUERY,
-    variables: { first, skip, orderBy }
+    variables: this._getQueryVariables()
   })
 
   const votedLink = data.feed.links.find(link => link.id === linkId)
